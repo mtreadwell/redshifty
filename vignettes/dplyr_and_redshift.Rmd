@@ -1,0 +1,48 @@
+---
+title: "Using dplyr and Redshift"
+author: "Michael Treadwell"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using dplyr and Redshift}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Amazon Redshift is based on PostgreSQL 8.0.2. For this reason, you can use `src_postgres` from the [dplyr package](https://cran.r-project.org/web/packages/dplyr/vignettes/databases.html) to connect to your Amazon Redshift cluster. However, because there are some important differences between Postgres and Redshift syntax, users can encounter some small yet annoying errors.
+
+## The Postgres Problem
+
+For example, if you've connected to a Redshift cluster using `src_postgres` and attempted to use `lag` then you've probably received this message `ERROR: Default parameter not be supported for window function lag`.
+
+```{r, eval = FALSE}
+library(dplyr)
+library(RPostgreSQL)
+
+pg <- src_postgres('dbname',
+                   host = 'redshift.amazonaws.com',
+                   port = '5439',
+                   user = 'user',
+                   password = 'password')
+
+tbl(pg, 'tablename') %>%
+  mutate(last_value = lag(value, order = 'date'))
+```
+
+## The Redshift Solution
+
+The package redshyft introduces the function `src_redshift` which enables users to connect to a Redshift cluster and use the basic dplyr verbs without error.
+
+```{r, eval = FALSE}
+library(dplyr)
+library(redshyft)
+
+rs <- src_redshift('dbname',
+                   host = 'redshift.amazonaws.com',
+                   port = '5439',
+                   user = 'user',
+                   password = 'password')
+
+tbl(rs, 'tablename') %>%
+  mutate(last_value = lag(value, order = 'date'))
+```

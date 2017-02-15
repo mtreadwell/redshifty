@@ -1,0 +1,22 @@
+Package: redshifty
+Type: Package
+Title: Use 'dplyr' in Amazon 'Redshift'
+Version: 0.1.0
+Date: 2017-02-14
+Author: Michael Treadwell
+Maintainer: Michael Treadwell <michael.treadwell@interworks.com>
+Description: Facilitates connection to and use of 'dplyr' with 'Redshift'. Defines
+    methods for generic 'dplyr' verbs in order to account for small differences
+    between 'PostgreSQL' and 'Redshift'.
+License: GPL-2
+LazyData: TRUE
+Depends:
+    DBI (>= 0.4.1),
+    dplyr (>= 0.5.0),
+    RRedshiftSQL (>= 0.1.2)
+Suggests:
+    methods,
+    knitr,
+    rmarkdown
+RoxygenNote: 5.0.1
+VignetteBuilder: knitr
